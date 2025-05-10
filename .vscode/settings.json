@@ -1,4 +1,14 @@
 {
 	"java.compile.nullAnalysis.mode": "automatic",
-	"java.configuration.updateBuildConfiguration": "interactive"
+	"java.configuration.updateBuildConfiguration": "interactive",
+	"[java]": {
+		"editor.defaultFormatter": "redhat.java",
+		"editor.tabSize": 2,
+		"editor.formatOnSave": true
+	},
+	"[xml]": {
+		"editor.defaultFormatter": "redhat.vscode-xml",
+		"editor.formatOnSave": true,
+		"editor.tabSize": 2
+	}
 }

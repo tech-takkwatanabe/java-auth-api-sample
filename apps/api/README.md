@@ -28,6 +28,18 @@ A robust Java-based RESTful API for user authentication with JWT tokens.
 - Java 17 or higher
 - Maven 3.6 or higher
 
+### Install
+
+```bash
+mvn clean install
+```
+
+### Format
+
+```bash
+mvn spotless:apply
+```
+
 ### Running the Application
 
 1. Clone the repository
