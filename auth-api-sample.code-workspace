@@ -1,0 +1,17 @@
+{
+	"folders": [{ "path": "apps/api" }, { "path": "apps/web" }],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"java.compile.nullAnalysis.mode": "automatic",
+		"[java]": {
+			"editor.defaultFormatter": "redhat.java",
+			"editor.tabSize": 2,
+			"editor.formatOnSave": true
+		},
+		"[xml]": {
+			"editor.defaultFormatter": "redhat.vscode-xml",
+			"editor.formatOnSave": true,
+			"editor.tabSize": 2
+		}
+	}
+}
