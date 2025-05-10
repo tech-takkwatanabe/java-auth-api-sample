@@ -17,8 +17,7 @@ A robust Java-based RESTful API for user authentication with JWT tokens.
 - Spring Boot 3.2.0
 - Spring Security
 - JSON Web Token (JWT)
-- Spring Data JPA
-- H2 Database (for development)
+- MyBatis
 - OpenAPI/Swagger for API documentation
 
 ## Getting Started
@@ -77,13 +76,13 @@ http://localhost:8080/swagger-ui.html
 
 ## Database
 
-The application uses H2 in-memory database for development. You can access the H2 console at:
+The application uses PostgreSQL as the database. It runs in a Docker container.
 
-http://localhost:8080/h2-console
-
-- JDBC URL: `jdbc:h2:mem:authdb`
-- Username: `sa`
-- Password: `password`
+- Host: `localhost`
+- Port: `5432`
+- Database: `auth_api`
+- Username: `postgres`
+- Password: `postgres`
 
 ## Configuration
 

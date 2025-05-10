@@ -22,7 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-  @Autowired private final JwtTokenProvider tokenProvider;
+  @Autowired
+  private final JwtTokenProvider tokenProvider;
 
   public SecurityConfig(JwtTokenProvider tokenProvider) {
     this.tokenProvider = tokenProvider;
@@ -35,20 +36,12 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers("/api/auth/**")
-                    .permitAll()
-                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
-                    .permitAll()
-                    .requestMatchers("/h2-console/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
-        .headers(
-            headers ->
-                headers.frameOptions(
-                    frameOptions -> frameOptions.disable()) // H2 コンソール用（本番で不要なら profile で切替も可）
-            )
+            auth -> auth.requestMatchers("/api/auth/**")
+                .permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
+                .permitAll()
+                .anyRequest()
+                .authenticated())
         .addFilterBefore(
             new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
         .build();
