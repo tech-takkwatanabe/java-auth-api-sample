@@ -1,7 +1,6 @@
 package com.example.authapi.repository;
 
 import com.example.authapi.model.User;
-
 import java.util.Optional;
 
 public interface UserRepository {

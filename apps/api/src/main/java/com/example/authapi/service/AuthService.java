@@ -48,11 +48,12 @@ public class AuthService {
     }
 
     // Create new user
-    User user = User.builder()
-        .username(signupRequest.getUsername())
-        .email(signupRequest.getEmail())
-        .password(passwordEncoder.encode(signupRequest.getPassword()))
-        .build();
+    User user =
+        User.builder()
+            .username(signupRequest.getUsername())
+            .email(signupRequest.getEmail())
+            .password(passwordEncoder.encode(signupRequest.getPassword()))
+            .build();
 
     userMapper.insert(user);
 
@@ -61,30 +62,33 @@ public class AuthService {
 
   @Transactional
   public JwtResponse authenticateUser(LoginRequest loginRequest) {
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginRequest.getUsername(), loginRequest.getPassword()));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     String username = authentication.getName();
     String accessToken = jwtTokenProvider.generateAccessToken(username);
 
-    User user = Optional.ofNullable(userMapper.selectByUsername(username))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user =
+        Optional.ofNullable(userMapper.selectByUsername(username))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + username));
 
     // Revoke any existing refresh tokens for this user
     refreshTokenMapper.revokeAllByUserId(user.getId());
 
     // Create new refresh token
     String refreshTokenString = jwtTokenProvider.generateRefreshToken(username);
-    RefreshToken refreshToken = RefreshToken.builder()
-        .user(user)
-        .token(refreshTokenString)
-        .expiryDate(Instant.now().plusMillis(604800000)) // 7 days
-        .revoked(false)
-        .build();
+    RefreshToken refreshToken =
+        RefreshToken.builder()
+            .user(user)
+            .token(refreshTokenString)
+            .expiryDate(Instant.now().plusMillis(604800000)) // 7 days
+            .revoked(false)
+            .build();
 
     refreshTokenMapper.insert(refreshToken);
 
@@ -130,9 +134,10 @@ public class AuthService {
   @Transactional
   public MessageResponse logoutUser() {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = Optional.ofNullable(userMapper.selectByUsername(username))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user =
+        Optional.ofNullable(userMapper.selectByUsername(username))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + username));
 
     refreshTokenMapper.revokeAllByUserId(user.getId());
 
@@ -141,9 +146,10 @@ public class AuthService {
 
   public UserResponse getCurrentUser() {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = Optional.ofNullable(userMapper.selectByUsername(username))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user =
+        Optional.ofNullable(userMapper.selectByUsername(username))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username: " + username));
 
     return UserResponse.builder()
         .id(user.getId())

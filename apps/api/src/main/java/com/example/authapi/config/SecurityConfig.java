@@ -22,8 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-  @Autowired
-  private final JwtTokenProvider tokenProvider;
+  @Autowired private final JwtTokenProvider tokenProvider;
 
   public SecurityConfig(JwtTokenProvider tokenProvider) {
     this.tokenProvider = tokenProvider;
@@ -36,12 +35,13 @@ public class SecurityConfig {
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
-            auth -> auth.requestMatchers("/api/auth/**")
-                .permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+            auth ->
+                auth.requestMatchers("/api/auth/**")
+                    .permitAll()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .addFilterBefore(
             new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
         .build();

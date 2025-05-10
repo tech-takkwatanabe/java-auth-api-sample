@@ -12,15 +12,13 @@ public class WebSecurityConfiguration {
 
   @Bean(name = "webSecurityFilterChain")
   public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(
-                "/swagger-ui/**",
-                "/swagger-ui.html",
-                "/v3/api-docs/**",
-                "/api-docs/**")
-            .permitAll()
-            .anyRequest().authenticated())
+    http.authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(
+                        "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/api-docs/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .csrf(csrf -> csrf.disable());
 
     return http.build();

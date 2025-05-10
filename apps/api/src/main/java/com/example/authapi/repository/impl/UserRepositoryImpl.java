@@ -3,9 +3,8 @@ package com.example.authapi.repository.impl;
 import com.example.authapi.mapper.UserMapper;
 import com.example.authapi.model.User;
 import com.example.authapi.repository.UserRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {

@@ -1,7 +1,6 @@
 package com.example.authapi.repository;
 
 import com.example.authapi.model.RefreshToken;
-
 import java.util.Optional;
 
 public interface RefreshTokenRepository {

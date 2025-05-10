@@ -3,9 +3,8 @@ package com.example.authapi.repository.impl;
 import com.example.authapi.mapper.RefreshTokenMapper;
 import com.example.authapi.model.RefreshToken;
 import com.example.authapi.repository.RefreshTokenRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
