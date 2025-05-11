@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.authapi.mapper.UserMapper">
+<mapper namespace="com.example.api.auth.mapper.UserMapper">
 
-  <insert id="insert" parameterType="com.example.authapi.model.User"> INSERT INTO users (username,
+  <insert id="insert" parameterType="com.example.api.auth.model.User"> INSERT INTO users (username,
     email, password, created_at) VALUES (#{username}, #{email}, #{password}, CURRENT_TIMESTAMP) </insert>
 
-  <select id="selectByUsername" resultType="com.example.authapi.model.User"> SELECT * FROM users
+  <select id="selectByUsername" resultType="com.example.api.auth.model.User"> SELECT * FROM users
     WHERE username = #{username} </select>
 
-  <select id="selectByEmail" resultType="com.example.authapi.model.User"> SELECT * FROM users WHERE
+  <select id="selectByEmail" resultType="com.example.api.auth.model.User"> SELECT * FROM users WHERE
     email = #{email} </select>
 
   <select id="countByUsername" resultType="int"> SELECT COUNT(*) FROM users WHERE username =

@@ -86,7 +86,7 @@ The application uses PostgreSQL as the database. It runs in a Docker container.
 
 - Host: `localhost`
 - Port: `5432`
-- Database: `auth_api`
+- Database: `java_auth_api_sample_db`
 - Username: `postgres`
 - Password: `postgres`
 

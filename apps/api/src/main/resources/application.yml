@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/auth_api
+    url: jdbc:postgresql://localhost:5432/java_auth_api_sample_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -12,7 +12,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.example.authapi.model
+  type-aliases-package: com.example.api.auth.model
   configuration:
     map-underscore-to-camel-case: true
     default-fetch-size: 100
