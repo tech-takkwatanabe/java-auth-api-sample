@@ -49,6 +49,12 @@ mvn spotless:apply
 mvn spring-boot:run
 ```
 
+### Generate openapi.yml　（After run application）
+
+```bash
+mvn springdoc-openapi:generate
+```
+
 The server will start on http://localhost:8080
 
 ### API Documentation
