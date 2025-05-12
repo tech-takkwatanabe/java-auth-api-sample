@@ -1,4 +1,4 @@
-package com.example.api.auth.dto.response;
+package com.example.api.auth.domain.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

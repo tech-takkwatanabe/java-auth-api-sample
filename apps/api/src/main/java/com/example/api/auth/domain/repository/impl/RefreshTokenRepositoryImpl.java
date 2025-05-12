@@ -1,8 +1,9 @@
-package com.example.api.auth.repository.impl;
+package com.example.api.auth.domain.repository.impl;
 
+import com.example.api.auth.domain.repository.RefreshTokenRepository;
 import com.example.api.auth.mapper.RefreshTokenMapper;
 import com.example.api.auth.model.RefreshToken;
-import com.example.api.auth.repository.RefreshTokenRepository;
+
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 

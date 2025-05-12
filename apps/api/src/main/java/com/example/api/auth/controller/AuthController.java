@@ -1,12 +1,12 @@
 package com.example.api.auth.controller;
 
-import com.example.api.auth.dto.request.LoginRequest;
-import com.example.api.auth.dto.request.SignupRequest;
-import com.example.api.auth.dto.request.TokenRefreshRequest;
-import com.example.api.auth.dto.response.JwtResponse;
-import com.example.api.auth.dto.response.MessageResponse;
-import com.example.api.auth.dto.response.TokenRefreshResponse;
-import com.example.api.auth.dto.response.UserResponse;
+import com.example.api.auth.domain.dto.request.LoginRequest;
+import com.example.api.auth.domain.dto.request.SignupRequest;
+import com.example.api.auth.domain.dto.request.TokenRefreshRequest;
+import com.example.api.auth.domain.dto.response.JwtResponse;
+import com.example.api.auth.domain.dto.response.MessageResponse;
+import com.example.api.auth.domain.dto.response.TokenRefreshResponse;
+import com.example.api.auth.domain.dto.response.UserResponse;
 import com.example.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,9 +55,7 @@ public class AuthController {
   }
 
   @GetMapping("/me")
-  @Operation(
-      summary = "Current user",
-      description = "Get the current authenticated user's information")
+  @Operation(summary = "Current user", description = "Get the current authenticated user's information")
   public ResponseEntity<UserResponse> getCurrentUser() {
     UserResponse response = authService.getCurrentUser();
     return ResponseEntity.ok(response);

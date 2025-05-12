@@ -1,4 +1,4 @@
-package com.example.api.auth.repository;
+package com.example.api.auth.domain.repository;
 
 import com.example.api.auth.model.RefreshToken;
 import java.util.Optional;

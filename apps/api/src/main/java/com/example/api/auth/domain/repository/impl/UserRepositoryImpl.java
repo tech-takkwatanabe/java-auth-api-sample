@@ -1,8 +1,9 @@
-package com.example.api.auth.repository.impl;
+package com.example.api.auth.domain.repository.impl;
 
+import com.example.api.auth.domain.repository.UserRepository;
 import com.example.api.auth.mapper.UserMapper;
 import com.example.api.auth.model.User;
-import com.example.api.auth.repository.UserRepository;
+
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 

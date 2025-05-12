@@ -1,12 +1,12 @@
 package com.example.api.auth.service;
 
-import com.example.api.auth.dto.request.LoginRequest;
-import com.example.api.auth.dto.request.SignupRequest;
-import com.example.api.auth.dto.request.TokenRefreshRequest;
-import com.example.api.auth.dto.response.JwtResponse;
-import com.example.api.auth.dto.response.MessageResponse;
-import com.example.api.auth.dto.response.TokenRefreshResponse;
-import com.example.api.auth.dto.response.UserResponse;
+import com.example.api.auth.domain.dto.request.LoginRequest;
+import com.example.api.auth.domain.dto.request.SignupRequest;
+import com.example.api.auth.domain.dto.request.TokenRefreshRequest;
+import com.example.api.auth.domain.dto.response.JwtResponse;
+import com.example.api.auth.domain.dto.response.MessageResponse;
+import com.example.api.auth.domain.dto.response.TokenRefreshResponse;
+import com.example.api.auth.domain.dto.response.UserResponse;
 import com.example.api.auth.exception.TokenRefreshException;
 import com.example.api.auth.mapper.RefreshTokenMapper;
 import com.example.api.auth.mapper.UserMapper;
@@ -14,6 +14,7 @@ import com.example.api.auth.model.RefreshToken;
 import com.example.api.auth.model.User;
 import com.example.api.auth.security.JwtTokenProvider;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.github.f4b6a3.uuid.UuidCreator;
 
 @Service
 @RequiredArgsConstructor
@@ -48,12 +50,14 @@ public class AuthService {
     }
 
     // Create new user
-    User user =
-        User.builder()
-            .username(signupRequest.getUsername())
-            .email(signupRequest.getEmail())
-            .password(passwordEncoder.encode(signupRequest.getPassword()))
-            .build();
+    User user = User.builder()
+        .uuid(UuidCreator.getTimeOrdered())
+        .username(signupRequest.getUsername())
+        .email(signupRequest.getEmail())
+        .password(passwordEncoder.encode(signupRequest.getPassword()))
+        .createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now())
+        .build();
 
     userMapper.insert(user);
 
@@ -62,33 +66,30 @@ public class AuthService {
 
   @Transactional
   public JwtResponse authenticateUser(LoginRequest loginRequest) {
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(), loginRequest.getPassword()));
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getEmail(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     String username = authentication.getName();
     String accessToken = jwtTokenProvider.generateAccessToken(username);
 
-    User user =
-        Optional.ofNullable(userMapper.selectByUsername(username))
-            .orElseThrow(
-                () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user = Optional.ofNullable(userMapper.selectByUsername(username))
+        .orElseThrow(
+            () -> new UsernameNotFoundException("User not found with username: " + username));
 
     // Revoke any existing refresh tokens for this user
     refreshTokenMapper.revokeAllByUserId(user.getId());
 
     // Create new refresh token
     String refreshTokenString = jwtTokenProvider.generateRefreshToken(username);
-    RefreshToken refreshToken =
-        RefreshToken.builder()
-            .user(user)
-            .token(refreshTokenString)
-            .expiryDate(Instant.now().plusMillis(604800000)) // 7 days
-            .revoked(false)
-            .build();
+    RefreshToken refreshToken = RefreshToken.builder()
+        .user(user)
+        .token(refreshTokenString)
+        .expiryDate(Instant.now().plusMillis(604800000)) // 7 days
+        .revoked(false)
+        .build();
 
     refreshTokenMapper.insert(refreshToken);
 
@@ -134,10 +135,9 @@ public class AuthService {
   @Transactional
   public MessageResponse logoutUser() {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user =
-        Optional.ofNullable(userMapper.selectByUsername(username))
-            .orElseThrow(
-                () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user = Optional.ofNullable(userMapper.selectByUsername(username))
+        .orElseThrow(
+            () -> new UsernameNotFoundException("User not found with username: " + username));
 
     refreshTokenMapper.revokeAllByUserId(user.getId());
 
@@ -146,10 +146,9 @@ public class AuthService {
 
   public UserResponse getCurrentUser() {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user =
-        Optional.ofNullable(userMapper.selectByUsername(username))
-            .orElseThrow(
-                () -> new UsernameNotFoundException("User not found with username: " + username));
+    User user = Optional.ofNullable(userMapper.selectByUsername(username))
+        .orElseThrow(
+            () -> new UsernameNotFoundException("User not found with username: " + username));
 
     return UserResponse.builder()
         .id(user.getId())

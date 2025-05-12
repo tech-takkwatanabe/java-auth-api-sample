@@ -1,4 +1,4 @@
-package com.example.api.auth.dto.request;
+package com.example.api.auth.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

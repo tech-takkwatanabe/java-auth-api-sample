@@ -1,12 +1,12 @@
-package com.example.api.auth.dto.request;
+package com.example.api.auth.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-  @NotBlank(message = "Username is required")
-  private String username;
+  @NotBlank(message = "email is required")
+  private String email;
 
   @NotBlank(message = "Password is required")
   private String password;
