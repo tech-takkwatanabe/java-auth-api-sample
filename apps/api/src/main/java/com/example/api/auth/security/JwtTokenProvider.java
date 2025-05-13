@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 public class JwtTokenProvider {
 
@@ -89,5 +91,10 @@ public class JwtTokenProvider {
     String username = getUsernameFromToken(token);
     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+  }
+
+  public Duration getRefreshTokenDuration() {
+    // Return the desired refresh token duration, e.g., 7 days
+    return Duration.ofDays(7);
   }
 }

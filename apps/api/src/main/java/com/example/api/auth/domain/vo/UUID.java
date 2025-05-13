@@ -2,18 +2,16 @@ package com.example.api.auth.domain.vo;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 
-import java.util.Objects;
-
 public class UUID {
 
   private final java.util.UUID value;
 
-  private UUID(java.util.UUID value) {
+  public UUID(java.util.UUID value) {
     this.value = value;
   }
 
   public static UUID random() {
-    // UUIDv7 を生成（タイムソート可能な UUID）
+    // UUIDv7（タイムソート可能）を生成
     return new UUID(UuidCreator.getTimeOrderedEpoch());
   }
 
@@ -38,14 +36,14 @@ public class UUID {
   public boolean equals(Object o) {
     if (this == o)
       return true;
-    if (!(o instanceof UUID))
+    if (o == null || getClass() != o.getClass())
       return false;
     UUID uuid = (UUID) o;
-    return Objects.equals(value, uuid.value);
+    return value.equals(uuid.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value);
+    return value.hashCode();
   }
 }

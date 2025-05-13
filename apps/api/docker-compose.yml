@@ -11,3 +11,12 @@ services:
       - '5432:5432'
     volumes:
       - ./docker/data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: java-auth-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ./docker/redis:/data
+    command: redis-server --save 60 1 --loglevel warning

@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.example.api.auth.domain.repository.RefreshTokenRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
+  private final RefreshTokenRepository refreshTokenRepository;
 
   @Transactional
   public MessageResponse registerUser(SignupRequest signupRequest) {
@@ -84,14 +86,15 @@ public class AuthService {
 
     // Create new refresh token
     String refreshTokenString = jwtTokenProvider.generateRefreshToken(username);
-    RefreshToken refreshToken = RefreshToken.builder()
-        .user(user)
+    com.example.api.auth.domain.entity.RefreshToken entityRefreshToken = com.example.api.auth.domain.entity.RefreshToken
+        .builder()
+        .userUuid(com.example.api.auth.domain.vo.UUID.from(user.getUuid()))
         .token(refreshTokenString)
-        .expiryDate(Instant.now().plusMillis(604800000)) // 7 days
+        .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
         .revoked(false)
         .build();
 
-    refreshTokenMapper.insert(refreshToken);
+    refreshTokenRepository.save(entityRefreshToken);
 
     return JwtResponse.builder()
         .accessToken(accessToken)
