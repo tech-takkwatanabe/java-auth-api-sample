@@ -8,7 +8,7 @@
 	},
 	"[xml]": {
 		"editor.defaultFormatter": "redhat.vscode-xml",
-		"editor.formatOnSave": true,
+		"editor.formatOnSave": false,
 		"editor.tabSize": 2
 	}
 }
