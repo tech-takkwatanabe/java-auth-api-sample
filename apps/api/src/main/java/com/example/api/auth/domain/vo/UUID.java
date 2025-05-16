@@ -46,4 +46,8 @@ public class UUID {
   public int hashCode() {
     return value.hashCode();
   }
+
+  public static UUID randomUUID() {
+    return UUID.random();
+  }
 }

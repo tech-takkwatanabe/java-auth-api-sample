@@ -25,8 +25,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.github.f4b6a3.uuid.UuidCreator;
 import com.example.api.auth.domain.repository.RefreshTokenRepository;
+import com.example.api.auth.domain.vo.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ public class AuthService {
 
     // Create new user
     User user = User.builder()
-        .uuid(UuidCreator.getTimeOrdered())
+        .uuid(UUID.randomUUID())
         .username(signupRequest.getUsername())
         .email(signupRequest.getEmail())
         .password(passwordEncoder.encode(signupRequest.getPassword()))
@@ -88,7 +88,7 @@ public class AuthService {
     String refreshTokenString = jwtTokenProvider.generateRefreshToken(username);
     com.example.api.auth.domain.entity.RefreshToken entityRefreshToken = com.example.api.auth.domain.entity.RefreshToken
         .builder()
-        .userUuid(com.example.api.auth.domain.vo.UUID.from(user.getUuid()))
+        .userUuid(user.getUuid())
         .token(refreshTokenString)
         .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
         .revoked(false)

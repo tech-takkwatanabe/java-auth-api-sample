@@ -2,7 +2,7 @@ package com.example.api.auth.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import com.example.api.auth.domain.vo.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,9 +40,6 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    if (uuid == null) {
-      uuid = UUID.randomUUID(); // UUID 自動生成
-    }
     createdAt = LocalDateTime.now();
     updatedAt = LocalDateTime.now();
   }
