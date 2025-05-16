@@ -49,6 +49,11 @@ mvn spotless:apply
 mvn spring-boot:run
 ```
 
+- Debug
+```bash
+mvn spring-boot:run -X > debug.log 2>&1
+```
+
 ### Generate openapi.yml　（After run application）
 
 ```bash
