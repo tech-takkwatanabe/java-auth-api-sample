@@ -42,9 +42,10 @@ server:
 
 # JWT Configuration
 jwt:
-  secret: yourSecretKey12345678901234567890123456789012
-  access-token-expiration: 300000 # 5 minutes in milliseconds
-  refresh-token-expiration: 604800000 # 7 days in milliseconds
+  secret: ${JWT_SECRET}
+  algorithm: HS512
+  access-token-expiration: ${ACCESS_TOKEN_EXPIRATION}
+  refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION}
 
 # OpenAPI Configuration
 springdoc:
