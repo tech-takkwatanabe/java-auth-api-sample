@@ -27,6 +27,11 @@ spring:
     redis:
       host: localhost
       port: 6379
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
