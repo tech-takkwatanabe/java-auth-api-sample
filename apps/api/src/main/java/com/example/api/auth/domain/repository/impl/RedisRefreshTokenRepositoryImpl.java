@@ -25,13 +25,13 @@ public class RedisRefreshTokenRepositoryImpl implements RefreshTokenRepository {
   }
 
   @Override
-  public Optional<RefreshToken> findByUserUuid(UUID userUuid) {
-    return Optional.ofNullable(redisTemplate.opsForValue().get(key(userUuid)));
+  public Optional<RefreshToken> findByUuid(UUID uuid) {
+    return Optional.ofNullable(redisTemplate.opsForValue().get(key(uuid)));
   }
 
   @Override
-  public void deleteByUserUuid(UUID userUuid) {
-    redisTemplate.delete(key(userUuid));
+  public void deleteByUuid(UUID uuid) {
+    redisTemplate.delete(key(uuid));
   }
 
   private String key(UUID uuid) {

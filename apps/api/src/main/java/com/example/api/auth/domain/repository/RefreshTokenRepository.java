@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface RefreshTokenRepository {
   void save(RefreshToken token);
 
-  Optional<RefreshToken> findByUserUuid(UUID userUuid);
+  Optional<RefreshToken> findByUuid(UUID uuid);
 
-  void deleteByUserUuid(UUID userUuid);
+  void deleteByUuid(UUID uuid);
 }
