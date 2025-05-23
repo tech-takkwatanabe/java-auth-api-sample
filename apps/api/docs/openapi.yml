@@ -55,7 +55,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/JwtResponse'
         '401':
-          description: Invalid username or password
+          description: Invalid email or password
           content:
             application/json:
               schema:
@@ -147,17 +147,17 @@ components:
           type: string
           minLength: 3
           maxLength: 20
-          example: "johndoe"
+          example: 'johndoe'
         email:
           type: string
           format: email
-          example: "john.doe@example.com"
+          example: 'john.doe@example.com'
         password:
           type: string
           format: password
           minLength: 6
           maxLength: 40
-          example: "Password123"
+          example: 'Password123'
 
     LoginRequest:
       type: object
@@ -167,11 +167,11 @@ components:
       properties:
         username:
           type: string
-          example: "johndoe"
+          example: 'johndoe'
         password:
           type: string
           format: password
-          example: "Password123"
+          example: 'Password123'
 
     TokenRefreshRequest:
       type: object
@@ -180,50 +180,50 @@ components:
       properties:
         refreshToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 
     JwtResponse:
       type: object
       properties:
         accessToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         refreshToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         tokenType:
           type: string
-          example: "Bearer"
+          example: 'Bearer'
         userId:
           type: integer
           format: int64
           example: 1
         username:
           type: string
-          example: "johndoe"
+          example: 'johndoe'
         email:
           type: string
-          example: "john.doe@example.com"
+          example: 'john.doe@example.com'
 
     TokenRefreshResponse:
       type: object
       properties:
         accessToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         refreshToken:
           type: string
-          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         tokenType:
           type: string
-          example: "Bearer"
+          example: 'Bearer'
 
     MessageResponse:
       type: object
       properties:
         message:
           type: string
-          example: "User registered successfully!"
+          example: 'User registered successfully!'
 
     UserResponse:
       type: object
@@ -234,21 +234,21 @@ components:
           example: 1
         username:
           type: string
-          example: "johndoe"
+          example: 'johndoe'
         email:
           type: string
-          example: "john.doe@example.com"
+          example: 'john.doe@example.com'
         createdAt:
           type: string
           format: date-time
-          example: "2023-01-01T12:00:00Z"
+          example: '2023-01-01T12:00:00Z'
 
     ErrorResponse:
       type: object
       properties:
         error:
           type: string
-          example: "Invalid username or password"
+          example: 'Invalid email or password'
 
   securitySchemes:
     bearerAuth:
