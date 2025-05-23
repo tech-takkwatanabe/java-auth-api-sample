@@ -3,8 +3,6 @@ package com.example.api.auth.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import java.security.Key;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.time.Duration;
+import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTokenProvider {
@@ -42,20 +43,21 @@ public class JwtTokenProvider {
     this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
   }
 
-  public String generateAccessToken(String username) {
-    return generateToken(username, accessTokenExpiration);
+  public String generateAccessToken(UUID userUuid) {
+    return generateToken(userUuid, accessTokenExpiration);
   }
 
-  public String generateRefreshToken(String username) {
-    return generateToken(username, refreshTokenExpiration);
+  public String generateRefreshToken(UUID userUuid) {
+    return generateToken(userUuid, refreshTokenExpiration);
   }
 
-  private String generateToken(String username, long expiration) {
+  private String generateToken(UUID userUuid, long expiration) {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + expiration);
 
     return Jwts.builder()
-        .setSubject(username)
+        .setSubject(userUuid.toString())
+        .claim("user_uuid", userUuid.toString())
         .setIssuer("auth-api")
         .setIssuedAt(now)
         .setExpiration(expiryDate)
@@ -63,38 +65,29 @@ public class JwtTokenProvider {
         .compact();
   }
 
-  public String getUsernameFromToken(String token) {
+  public UUID getUserUuidFromToken(String token) {
     Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-
-    return claims.getSubject();
+    return UUID.fromString(claims.get("user_uuid", String.class));
   }
 
   public boolean validateToken(String token) {
     try {
       Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
       return true;
-    } catch (SecurityException ex) {
-      log.warn("Invalid JWT signature: {}", ex.getMessage());
-    } catch (MalformedJwtException ex) {
-      log.warn("Invalid JWT token: {}", ex.getMessage());
-    } catch (ExpiredJwtException ex) {
-      log.warn("Expired JWT token: {}", ex.getMessage());
-    } catch (UnsupportedJwtException ex) {
-      log.warn("Unsupported JWT token: {}", ex.getMessage());
-    } catch (IllegalArgumentException ex) {
-      log.warn("JWT claims string is empty: {}", ex.getMessage());
+    } catch (SecurityException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException
+        | IllegalArgumentException ex) {
+      log.warn("JWT validation failed: {}", ex.getMessage());
+      return false;
     }
-    return false;
   }
 
   public Authentication getAuthentication(String token) {
-    String username = getUsernameFromToken(token);
-    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    UUID userUuid = getUserUuidFromToken(token);
+    UserDetails userDetails = userDetailsService.loadUserByUsername(userUuid.toString());
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
 
   public Duration getRefreshTokenDuration() {
-    // Return the desired refresh token duration, e.g., 7 days
-    return Duration.ofDays(7);
+    return Duration.ofMillis(refreshTokenExpiration);
   }
 }
