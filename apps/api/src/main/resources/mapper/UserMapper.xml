@@ -7,15 +7,22 @@
     parameterType="com.example.api.auth.model.User"> INSERT INTO users ( uuid, username, email,
     password, created_at ) VALUES ( #{uuid}, #{username}, #{email}, #{password}, CURRENT_TIMESTAMP ) </insert>
 
-  <select id="selectByUsername"
+  <select
+    id="selectByUsername"
     resultType="com.example.api.auth.model.User"> SELECT * FROM users WHERE username = #{username} </select>
 
-  <select id="selectByEmail"
+  <select
+    id="selectByUuid"
+    resultType="com.example.api.auth.model.User"> SELECT * FROM users WHERE uuid = #{uuid} </select>
+
+  <select
+    id="selectByEmail"
     resultType="com.example.api.auth.model.User"> SELECT * FROM users WHERE email = #{email} </select>
 
-  <select id="countByUsername" resultType="int"> SELECT COUNT(*) FROM users WHERE username =
-    #{username} </select>
+  <select
+    id="countByUsername" resultType="int"> SELECT COUNT(*) FROM users WHERE username = #{username} </select>
 
-  <select id="countByEmail" resultType="int"> SELECT COUNT(*) FROM users WHERE email = #{email} </select>
+  <select
+    id="countByEmail" resultType="int"> SELECT COUNT(*) FROM users WHERE email = #{email} </select>
 
 </mapper>
