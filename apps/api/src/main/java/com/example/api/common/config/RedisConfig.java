@@ -11,16 +11,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class RedisConfig {
 
+  private final ObjectMapper objectMapper;
+
+  public RedisConfig(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
+
   @Bean
   public RedisTemplate<String, RefreshToken> redisTemplate(RedisConnectionFactory factory) {
     RedisTemplate<String, RefreshToken> template = new RedisTemplate<>();
     template.setConnectionFactory(factory);
 
     // Jackson を使って RefreshToken を JSON 形式で保存
-    Jackson2JsonRedisSerializer<RefreshToken> serializer = new Jackson2JsonRedisSerializer<>(RefreshToken.class);
-
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.findAndRegisterModules();
+    // ここで、注入されたカスタマイズ済みの objectMapper を使用する
+    Jackson2JsonRedisSerializer<RefreshToken> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,
+        RefreshToken.class);
 
     template.setKeySerializer(new StringRedisSerializer());
     template.setValueSerializer(serializer);
