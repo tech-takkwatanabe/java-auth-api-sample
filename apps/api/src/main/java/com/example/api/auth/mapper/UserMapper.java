@@ -10,6 +10,8 @@ public interface UserMapper {
 
   User selectByEmail(@Param("email") String email);
 
+  User selectByUuid(@Param("uuid") String uuid);
+
   int countByUsername(@Param("username") String username);
 
   int countByEmail(@Param("email") String email);
