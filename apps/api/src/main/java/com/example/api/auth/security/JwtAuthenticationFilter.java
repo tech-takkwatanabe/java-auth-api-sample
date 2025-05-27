@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.example.api.auth.util.JwtUtils;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
     try {
-      String jwt = getJwtFromRequest(request);
+      String jwt = JwtUtils.getJwtFromRequest(request);
 
       if (!StringUtils.hasText(jwt)) {
         log.debug("No JWT token found in request headers");
@@ -45,13 +46,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     filterChain.doFilter(request, response);
-  }
-
-  private String getJwtFromRequest(HttpServletRequest request) {
-    String bearerToken = request.getHeader("Authorization");
-    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-      return bearerToken.substring(7);
-    }
-    return null;
   }
 }
