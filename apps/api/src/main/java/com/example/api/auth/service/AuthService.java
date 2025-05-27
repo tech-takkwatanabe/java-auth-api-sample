@@ -14,6 +14,7 @@ import com.example.api.auth.mapper.UserMapper;
 import com.example.api.auth.model.User;
 import com.example.api.auth.security.JwtTokenProvider;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import com.example.api.auth.util.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -140,10 +142,16 @@ public class AuthService {
     return MessageResponse.builder().message("Logged out successfully!").build();
   }
 
-  public UserResponse getCurrentUser() {
-    String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = Optional.ofNullable(userMapper.selectByUsername(username))
-        .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+  public UserResponse getCurrentUser(HttpServletRequest request) {
+    String token = JwtUtils.getJwtFromRequest(request);
+    // System.out.println("Extracted JWT token: " + token);
+    if (token == null || !jwtTokenProvider.validateToken(token)) {
+      throw new RuntimeException("Invalid or missing token");
+    }
+
+    UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(token));
+    User user = Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
+        .orElseThrow(() -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
 
     return UserResponse.builder()
         .id(user.getId())

@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -56,8 +57,8 @@ public class AuthController {
 
   @GetMapping("/me")
   @Operation(summary = "Current user", description = "Get the current authenticated user's information")
-  public ResponseEntity<UserResponse> getCurrentUser() {
-    UserResponse response = authService.getCurrentUser();
+  public ResponseEntity<UserResponse> getCurrentUser(HttpServletRequest request) {
+    UserResponse response = authService.getCurrentUser(request);
     return ResponseEntity.ok(response);
   }
 }
