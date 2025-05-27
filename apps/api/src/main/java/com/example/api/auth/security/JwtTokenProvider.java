@@ -25,10 +25,10 @@ public class JwtTokenProvider {
   @Value("${jwt.secret:defaultSecretKey12345678901234567890123456789012}")
   private String jwtSecret;
 
-  @Value("${jwt.access-token-expiration:300000}") // 5 minutes
+  @Value("${jwt.access-token-expiration:86400000}")
   private long accessTokenExpiration;
 
-  @Value("${jwt.refresh-token-expiration:604800000}") // 7 days
+  @Value("${jwt.refresh-token-expiration:604800000}")
   private long refreshTokenExpiration;
 
   private final UserDetailsService userDetailsService;
