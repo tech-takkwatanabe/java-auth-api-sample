@@ -50,8 +50,8 @@ public class AuthController {
 
   @PostMapping("/logout")
   @Operation(summary = "User logout", description = "Revoke refresh tokens and log out the user")
-  public ResponseEntity<MessageResponse> logoutUser() {
-    MessageResponse response = authService.logoutUser();
+  public ResponseEntity<MessageResponse> logoutUser(HttpServletRequest request) {
+    MessageResponse response = authService.logoutUser(request);
     return ResponseEntity.ok(response);
   }
 

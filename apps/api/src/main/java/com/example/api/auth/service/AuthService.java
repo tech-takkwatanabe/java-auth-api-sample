@@ -132,10 +132,15 @@ public class AuthService {
   }
 
   @Transactional
-  public MessageResponse logoutUser() {
-    String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    User user = Optional.ofNullable(userMapper.selectByUsername(username))
-        .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+  public MessageResponse logoutUser(HttpServletRequest request) {
+    String token = JwtUtils.getJwtFromRequest(request);
+    if (token == null || !jwtTokenProvider.validateToken(token)) {
+      throw new RuntimeException("Invalid or missing token");
+    }
+
+    UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(token));
+    User user = Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
+        .orElseThrow(() -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
 
     refreshTokenRepository.deleteByUuid(user.getUuid());
 
