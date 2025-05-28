@@ -34,6 +34,10 @@ public class RedisRefreshTokenRepositoryImpl implements RefreshTokenRepository {
     redisTemplate.delete(key(uuid));
   }
 
+  private String key(String userUuid) {
+    return PREFIX + userUuid;
+  }
+
   private String key(UUID uuid) {
     return PREFIX + uuid.getValue();
   }

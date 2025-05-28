@@ -9,6 +9,7 @@ import com.example.api.auth.domain.dto.response.TokenRefreshResponse;
 import com.example.api.auth.domain.dto.response.UserResponse;
 import com.example.api.auth.domain.repository.RefreshTokenRepository;
 import com.example.api.auth.domain.vo.UUID;
+import com.example.api.auth.domain.entity.RefreshToken;
 import com.example.api.auth.exception.TokenRefreshException;
 import com.example.api.auth.mapper.UserMapper;
 import com.example.api.auth.model.User;
@@ -80,9 +81,9 @@ public class AuthService {
     String accessToken = jwtTokenProvider.generateAccessToken(user.getUuid().getValue());
     String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUuid().getValue());
 
-    com.example.api.auth.domain.entity.RefreshToken entityRefreshToken = com.example.api.auth.domain.entity.RefreshToken
+    RefreshToken entityRefreshToken = RefreshToken
         .builder()
-        .userUuid(user.getUuid())
+        .userUuid(user.getUuid().toString())
         .token(refreshToken)
         .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
         .revoked(false)
@@ -105,7 +106,7 @@ public class AuthService {
     String requestRefreshToken = request.getRefreshToken();
 
     UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(requestRefreshToken));
-    com.example.api.auth.domain.entity.RefreshToken token = refreshTokenRepository.findByUuid(userUuid)
+    RefreshToken token = refreshTokenRepository.findByUuid(userUuid)
         .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token not found!"));
 
     if (!token.getToken().equals(requestRefreshToken)) {
@@ -122,10 +123,10 @@ public class AuthService {
         .build();
   }
 
-  private com.example.api.auth.domain.entity.RefreshToken verifyExpiration(
-      com.example.api.auth.domain.entity.RefreshToken token) {
+  private RefreshToken verifyExpiration(
+      RefreshToken token) {
     if (token.isRevoked() || token.getExpiryDate().isBefore(Instant.now())) {
-      refreshTokenRepository.deleteByUuid(token.getUserUuid());
+      refreshTokenRepository.deleteByUuid(UUID.from(token.getUserUuid()));
       throw new TokenRefreshException(token.getToken(), "Refresh token was expired or revoked. Please login again.");
     }
     return token;
@@ -149,7 +150,6 @@ public class AuthService {
 
   public UserResponse getCurrentUser(HttpServletRequest request) {
     String token = JwtUtils.getJwtFromRequest(request);
-    // System.out.println("Extracted JWT token: " + token);
     if (token == null || !jwtTokenProvider.validateToken(token)) {
       throw new RuntimeException("Invalid or missing token");
     }
