@@ -9,12 +9,13 @@ import com.example.api.auth.domain.dto.response.TokenRefreshResponse;
 import com.example.api.auth.domain.dto.response.UserResponse;
 import com.example.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -49,14 +50,20 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  @Operation(summary = "User logout", description = "Revoke refresh tokens and log out the user")
+  @Operation(
+      summary = "User logout",
+      description = "Revoke refresh tokens and log out the user",
+      security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<MessageResponse> logoutUser(HttpServletRequest request) {
     MessageResponse response = authService.logoutUser(request);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/me")
-  @Operation(summary = "Current user", description = "Get the current authenticated user's information")
+  @Operation(
+      summary = "Current user",
+      description = "Get the current authenticated user's information",
+      security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<UserResponse> getCurrentUser(HttpServletRequest request) {
     UserResponse response = authService.getCurrentUser(request);
     return ResponseEntity.ok(response);
