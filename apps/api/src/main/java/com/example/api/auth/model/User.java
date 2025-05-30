@@ -1,8 +1,8 @@
 package com.example.api.auth.model;
 
+import com.example.api.auth.domain.vo.UUID;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.example.api.auth.domain.vo.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

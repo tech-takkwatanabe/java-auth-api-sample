@@ -1,5 +1,6 @@
 package com.example.api.auth.security;
 
+import com.example.api.auth.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.example.api.auth.util.JwtUtils;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

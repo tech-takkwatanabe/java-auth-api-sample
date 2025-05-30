@@ -1,12 +1,11 @@
 package com.example.api.auth.model;
 
 import com.example.api.auth.domain.vo.UUID;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
 
 @Data
 @Builder
