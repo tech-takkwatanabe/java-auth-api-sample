@@ -1,8 +1,7 @@
 package com.example.api.auth.domain.entity;
 
-import lombok.*;
-
 import java.time.Instant;
+import lombok.*;
 
 @Data
 @Builder

@@ -1,10 +1,10 @@
 package com.example.api.auth.domain.entity;
 
-import lombok.*;
-import java.time.LocalDateTime;
-import com.example.api.auth.domain.vo.UserId;
-import com.example.api.auth.domain.vo.UUID;
 import com.example.api.auth.domain.vo.Email;
+import com.example.api.auth.domain.vo.UUID;
+import com.example.api.auth.domain.vo.UserId;
+import java.time.LocalDateTime;
+import lombok.*;
 
 @Data
 public class User {

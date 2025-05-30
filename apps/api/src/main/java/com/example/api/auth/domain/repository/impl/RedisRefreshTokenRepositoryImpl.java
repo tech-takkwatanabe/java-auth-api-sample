@@ -3,13 +3,12 @@ package com.example.api.auth.domain.repository.impl;
 import com.example.api.auth.domain.entity.RefreshToken;
 import com.example.api.auth.domain.repository.RefreshTokenRepository;
 import com.example.api.auth.domain.vo.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Repository;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
