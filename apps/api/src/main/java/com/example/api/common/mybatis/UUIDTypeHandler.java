@@ -1,15 +1,15 @@
 package com.example.api.common.mybatis;
 
 import com.example.api.auth.domain.vo.UUID;
+import java.sql.*;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
-import java.sql.*;
 
 public class UUIDTypeHandler extends BaseTypeHandler<UUID> {
 
   @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType)
+      throws SQLException {
     ps.setObject(i, parameter.getValue());
   }
 
