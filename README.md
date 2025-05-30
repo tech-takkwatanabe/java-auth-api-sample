@@ -28,6 +28,7 @@ Spring Bootを使用した認証APIのサンプル実装です。
 
 ```bash
 cd apps/api
+make init
 mvn install
 ```
 
