@@ -27,9 +27,13 @@ Spring Bootを使用した認証APIのサンプル実装です。
    - Maven
    - Redis
 
-2. アプリケーションの起動
 ```bash
 cd apps/api
+mvn install
+```
+
+2. アプリケーションの起動
+```bash
 mvn spring-boot:run
 ```
 
@@ -77,3 +81,7 @@ http://localhost:8080/swagger-ui.html
 - パスワードのハッシュ化
 - リフレッシュトークンの実装
 - トークンの有効期限管理
+
+## TBD
+
+`apps/web`以下はフロントエンド領域としています。
