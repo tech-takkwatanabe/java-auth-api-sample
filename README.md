@@ -59,6 +59,14 @@ mvn spring-boot:run -X > debug.log 2>&1
 mvn springdoc-openapi:generate
 ```
 
+*mvnプラグインが非対応でopenapi.ymlを生成できないため、以下にて対応
+
+```bash
+curl -o docs/openapi.json http://localhost:8080/v3/api-docs
+```
+json → yaml変換
+https://www.bairesdev.com/tools/json2yaml/
+
 ## API エンドポイント
 
 ### 認証関連

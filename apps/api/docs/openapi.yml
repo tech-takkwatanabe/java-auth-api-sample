@@ -1,13 +1,16 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
   title: Authentication API
   description: API for user authentication with JWT tokens
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8080'
-    description: Local server
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Authentication
+    description: Authentication management API
 paths:
-  /api/auth/signup:
+  '/api/auth/signup':
     post:
       tags:
         - Authentication
@@ -15,53 +18,19 @@ paths:
       description: Create a new user account
       operationId: registerUser
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignupRequest'
-      responses:
-        '200':
-          description: User registration successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
-        '400':
-          description: Validation error or user already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/auth/login:
-    post:
-      tags:
-        - Authentication
-      summary: User login
-      description: Authenticate user and return JWT tokens
-      operationId: authenticateUser
-      requestBody:
+              '$ref': '#/components/schemas/SignupRequest'
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          description: Authentication successful
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/JwtResponse'
-        '401':
-          description: Invalid email or password
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/auth/refresh:
+                '$ref': '#/components/schemas/MessageResponse'
+  '/api/auth/refresh':
     post:
       tags:
         - Authentication
@@ -69,192 +38,152 @@ paths:
       description: Get new access token using refresh token
       operationId: refreshToken
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefreshRequest'
+              '$ref': '#/components/schemas/TokenRefreshRequest'
+        required: true
       responses:
         '200':
-          description: Token refresh successful
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/TokenRefreshResponse'
-        '403':
-          description: Invalid or expired refresh token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/auth/logout:
+                '$ref': '#/components/schemas/TokenRefreshResponse'
+  '/api/auth/logout':
     post:
       tags:
         - Authentication
       summary: User logout
       description: Revoke refresh tokens and log out the user
       operationId: logoutUser
-      security:
-        - bearerAuth: []
       responses:
         '200':
-          description: Logout successful
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/MessageResponse'
-        '401':
-          description: Unauthorized
+                '$ref': '#/components/schemas/MessageResponse'
+      security:
+        - bearerAuth: []
+  '/api/auth/login':
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT tokens
+      operationId: authenticateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              '$ref': '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /api/auth/me:
+                '$ref': '#/components/schemas/JwtResponse'
+  '/api/auth/me':
     get:
       tags:
         - Authentication
       summary: Current user
       description: Get the current authenticated user's information
       operationId: getCurrentUser
-      security:
-        - bearerAuth: []
       responses:
         '200':
-          description: User information retrieved successfully
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/UserResponse'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                '$ref': '#/components/schemas/UserResponse'
+      security:
+        - bearerAuth: []
 components:
   schemas:
     SignupRequest:
-      type: object
       required:
-        - username
         - email
         - password
-      properties:
-        username:
-          type: string
-          minLength: 3
-          maxLength: 20
-          example: 'johndoe'
-        email:
-          type: string
-          format: email
-          example: 'john.doe@example.com'
-        password:
-          type: string
-          format: password
-          minLength: 6
-          maxLength: 40
-          example: 'Password123'
-
-    LoginRequest:
-      type: object
-      required:
         - username
-        - password
-      properties:
-        username:
-          type: string
-          example: 'johndoe'
-        password:
-          type: string
-          format: password
-          example: 'Password123'
-
-    TokenRefreshRequest:
-      type: object
-      required:
-        - refreshToken
-      properties:
-        refreshToken:
-          type: string
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-
-    JwtResponse:
       type: object
       properties:
-        accessToken:
-          type: string
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-        refreshToken:
-          type: string
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-        tokenType:
-          type: string
-          example: 'Bearer'
-        userId:
-          type: integer
-          format: int64
-          example: 1
         username:
+          maxLength: 20
+          minLength: 1
           type: string
-          example: 'johndoe'
         email:
           type: string
-          example: 'john.doe@example.com'
-
-    TokenRefreshResponse:
-      type: object
-      properties:
-        accessToken:
+        password:
+          maxLength: 40
+          minLength: 6
           type: string
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-        refreshToken:
-          type: string
-          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
-        tokenType:
-          type: string
-          example: 'Bearer'
-
     MessageResponse:
       type: object
       properties:
         message:
           type: string
-          example: 'User registered successfully!'
-
+    TokenRefreshRequest:
+      required:
+        - refreshToken
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    TokenRefreshResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+    LoginRequest:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    JwtResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
     UserResponse:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 1
         username:
           type: string
-          example: 'johndoe'
         email:
           type: string
-          example: 'john.doe@example.com'
         createdAt:
           type: string
           format: date-time
-          example: '2023-01-01T12:00:00Z'
-
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          example: 'Invalid email or password'
-
   securitySchemes:
     bearerAuth:
       type: http
+      name: bearerAuth
       scheme: bearer
       bearerFormat: JWT
-
-security:
-  - bearerAuth: []
