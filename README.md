@@ -25,7 +25,6 @@ Spring Bootを使用した認証APIのサンプル実装です。
 1. 必要な環境
    - Java 17
    - Maven
-   - Redis
 
 ```bash
 cd apps/api
