@@ -1,9 +1,8 @@
 package com.example.api.auth.domain.vo;
 
+import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-
-import java.util.regex.Pattern;
 
 @Value
 @EqualsAndHashCode
