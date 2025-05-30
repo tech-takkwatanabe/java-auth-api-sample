@@ -1,15 +1,15 @@
 package com.example.api.common.mybatis;
 
 import com.example.api.auth.domain.vo.Email;
+import java.sql.*;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-
-import java.sql.*;
 
 public class EmailTypeHandler extends BaseTypeHandler<Email> {
 
   @Override
-  public void setNonNullParameter(PreparedStatement ps, int i, Email parameter, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement ps, int i, Email parameter, JdbcType jdbcType)
+      throws SQLException {
     ps.setString(i, parameter.getValue());
   }
 
