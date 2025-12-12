@@ -17,17 +17,20 @@ public class RedisRefreshTokenRepositoryImpl implements RefreshTokenRepository {
   private final RedisTemplate<String, RefreshToken> redisTemplate;
   private static final String PREFIX = "refresh_token:";
 
+  @SuppressWarnings("null")
   @Override
   public void save(RefreshToken token) {
     Duration ttl = Duration.between(Instant.now(), token.getExpiryDate());
     redisTemplate.opsForValue().set(key(token.getUserUuid()), token, ttl);
   }
 
+  @SuppressWarnings("null")
   @Override
   public Optional<RefreshToken> findByUuid(UUID uuid) {
     return Optional.ofNullable(redisTemplate.opsForValue().get(key(uuid)));
   }
 
+  @SuppressWarnings("null")
   @Override
   public void deleteByUuid(UUID uuid) {
     redisTemplate.delete(key(uuid));
