@@ -3,7 +3,6 @@ package com.example.api.auth.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class JwtTokenProvider {
   private long refreshTokenExpiration;
 
   private final UserDetailsService userDetailsService;
-  private Key key;
+  private javax.crypto.SecretKey key;
 
   public JwtTokenProvider(UserDetailsService userDetailsService) {
     this.userDetailsService = userDetailsService;
@@ -55,23 +54,26 @@ public class JwtTokenProvider {
     Date expiryDate = new Date(now.getTime() + expiration);
 
     return Jwts.builder()
-        .setSubject(userUuid.toString())
+        .claim(Claims.SUBJECT, userUuid.toString())
         .claim("user_uuid", userUuid.toString())
-        .setIssuer("auth-api")
-        .setIssuedAt(now)
-        .setExpiration(expiryDate)
-        .signWith(key, SignatureAlgorithm.HS512)
+        .claim(Claims.ISSUER, "auth-api")
+        .claim(Claims.ISSUED_AT, now)
+        .claim(Claims.EXPIRATION, expiryDate)
+        .signWith(key)
         .compact();
   }
 
   public UUID getUserUuidFromToken(String token) {
-    Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    // JJWT 0.12.0+ API: Jwts.parser() returns JwtParserBuilder
+    @SuppressWarnings("deprecation")
+    Claims claims = ((Object) Jwts.parser()).verifyWith(key).build().parseSignedClaims(token).getPayload();
     return UUID.fromString(claims.get("user_uuid", String.class));
   }
 
+  @SuppressWarnings("deprecation")
   public boolean validateToken(String token) {
     try {
-      Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+      Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
       return true;
     } catch (SecurityException
         | MalformedJwtException
