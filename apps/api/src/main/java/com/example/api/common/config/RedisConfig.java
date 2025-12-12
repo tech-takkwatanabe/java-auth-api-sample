@@ -17,7 +17,7 @@ public class RedisConfig {
     this.objectMapper = objectMapper;
   }
 
-  @SuppressWarnings("null")
+  @SuppressWarnings({ "deprecation" })
   @Bean
   public RedisTemplate<String, RefreshToken> redisTemplate(RedisConnectionFactory factory) {
     RedisTemplate<String, RefreshToken> template = new RedisTemplate<>();
