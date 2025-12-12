@@ -13,7 +13,7 @@ Spring Bootを使用した認証APIのサンプル実装です。
 ## 技術スタック
 
 - Java 17
-- Spring Boot 3.2
+- Spring Boot ~~3.2~~ → 4.0
 - Spring Security
 - MyBatis
 - Redis
