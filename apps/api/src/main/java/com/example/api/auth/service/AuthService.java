@@ -49,14 +49,15 @@ public class AuthService {
       return MessageResponse.builder().message("Error: Email is already in use!").build();
     }
 
-    User user = User.builder()
-        .uuid(UUID.randomUUID())
-        .username(signupRequest.getUsername())
-        .email(signupRequest.getEmail())
-        .password(passwordEncoder.encode(signupRequest.getPassword()))
-        .createdAt(LocalDateTime.now())
-        .updatedAt(LocalDateTime.now())
-        .build();
+    User user =
+        User.builder()
+            .uuid(UUID.randomUUID())
+            .username(signupRequest.getUsername())
+            .email(signupRequest.getEmail())
+            .password(passwordEncoder.encode(signupRequest.getPassword()))
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .build();
 
     userMapper.insert(user);
     return MessageResponse.builder().message("User registered successfully!").build();
@@ -64,28 +65,31 @@ public class AuthService {
 
   @Transactional
   public JwtResponse authenticateUser(LoginRequest loginRequest) {
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginRequest.getEmail(), loginRequest.getPassword()));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getEmail(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     String email = authentication.getName();
-    User user = Optional.ofNullable(userMapper.selectByEmail(email))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with email: " + email));
+    User user =
+        Optional.ofNullable(userMapper.selectByEmail(email))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with email: " + email));
 
     refreshTokenRepository.deleteByUuid(user.getUuid());
 
     String accessToken = jwtTokenProvider.generateAccessToken(user.getUuid().getValue());
     String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUuid().getValue());
 
-    RefreshToken entityRefreshToken = RefreshToken.builder()
-        .userUuid(user.getUuid().toString())
-        .token(refreshToken)
-        .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
-        .revoked(false)
-        .build();
+    RefreshToken entityRefreshToken =
+        RefreshToken.builder()
+            .userUuid(user.getUuid().toString())
+            .token(refreshToken)
+            .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
+            .revoked(false)
+            .build();
 
     refreshTokenRepository.save(entityRefreshToken);
 
@@ -104,10 +108,11 @@ public class AuthService {
     String requestRefreshToken = request.getRefreshToken();
 
     UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(requestRefreshToken));
-    RefreshToken token = refreshTokenRepository
-        .findByUuid(userUuid)
-        .orElseThrow(
-            () -> new TokenRefreshException(requestRefreshToken, "Refresh token not found!"));
+    RefreshToken token =
+        refreshTokenRepository
+            .findByUuid(userUuid)
+            .orElseThrow(
+                () -> new TokenRefreshException(requestRefreshToken, "Refresh token not found!"));
 
     if (!token.getToken().equals(requestRefreshToken)) {
       throw new TokenRefreshException(requestRefreshToken, "Refresh token is invalid!");
@@ -123,12 +128,13 @@ public class AuthService {
     String newRefreshToken = jwtTokenProvider.generateRefreshToken(userUuid.getValue());
 
     // 新しいリフレッシュトークンを保存
-    RefreshToken entityRefreshToken = RefreshToken.builder()
-        .userUuid(userUuid.toString())
-        .token(newRefreshToken)
-        .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
-        .revoked(false)
-        .build();
+    RefreshToken entityRefreshToken =
+        RefreshToken.builder()
+            .userUuid(userUuid.toString())
+            .token(newRefreshToken)
+            .expiryDate(Instant.now().plus(jwtTokenProvider.getRefreshTokenDuration()))
+            .revoked(false)
+            .build();
     refreshTokenRepository.save(entityRefreshToken);
 
     return TokenRefreshResponse.builder()
@@ -155,9 +161,10 @@ public class AuthService {
     }
 
     UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(token));
-    User user = Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
+    User user =
+        Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
 
     refreshTokenRepository.deleteByUuid(user.getUuid());
 
@@ -171,9 +178,10 @@ public class AuthService {
     }
 
     UUID userUuid = new UUID(jwtTokenProvider.getUserUuidFromToken(token));
-    User user = Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
-        .orElseThrow(
-            () -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
+    User user =
+        Optional.ofNullable(userMapper.selectByUuid(userUuid.toString()))
+            .orElseThrow(
+                () -> new UsernameNotFoundException("User not found with uuid: " + userUuid));
 
     return UserResponse.builder()
         .id(user.getId())
