@@ -66,7 +66,8 @@ public class JwtTokenProvider {
   public UUID getUserUuidFromToken(String token) {
     // JJWT 0.12.0+ API: Jwts.parser() returns JwtParserBuilder
     @SuppressWarnings("deprecation")
-    Claims claims = ((Object) Jwts.parser()).verifyWith(key).build().parseSignedClaims(token).getPayload();
+    Claims claims =
+        ((Object) Jwts.parser()).verifyWith(key).build().parseSignedClaims(token).getPayload();
     return UUID.fromString(claims.get("user_uuid", String.class));
   }
 
