@@ -17,6 +17,7 @@ public class RedisConfig {
     this.objectMapper = objectMapper;
   }
 
+  @SuppressWarnings("null")
   @Bean
   public RedisTemplate<String, RefreshToken> redisTemplate(RedisConnectionFactory factory) {
     RedisTemplate<String, RefreshToken> template = new RedisTemplate<>();
@@ -24,8 +25,8 @@ public class RedisConfig {
 
     // Jackson を使って RefreshToken を JSON 形式で保存
     // ここで、注入されたカスタマイズ済みの objectMapper を使用する
-    Jackson2JsonRedisSerializer<RefreshToken> serializer =
-        new Jackson2JsonRedisSerializer<>(objectMapper, RefreshToken.class);
+    Jackson2JsonRedisSerializer<RefreshToken> serializer = new Jackson2JsonRedisSerializer<>(objectMapper,
+        RefreshToken.class);
 
     template.setKeySerializer(new StringRedisSerializer());
     template.setValueSerializer(serializer);
